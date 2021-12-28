@@ -1,0 +1,5 @@
+datasets/*
+weights/*
+runs/*
+wandb/*
+__pycache__/*
