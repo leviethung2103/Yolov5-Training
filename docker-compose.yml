@@ -1,0 +1,56 @@
+version: "2.3"
+
+services: 
+    # old version of nvidia
+    tlt-toolkit:
+        runtime: nvidia
+        image: custom-tlt-stream:v3.0-dp-py3-0.0.2
+        ports: 
+            - '8888:8888'
+        restart: always
+        volumes:
+            - /mnt/Hung_Workspace:/workspace/tlt-experiments
+            - /mnt/Hung_Workspace/pretrained_weights:/workspace/pretrained_weights
+        entrypoint: jupyter notebook --ip 0.0.0.0 --allow-root --port 8888
+
+    # suggestion from NVIDIA
+    # go inside the docker and run jupyter notebook password to change the password
+    # pip3 install jupyterlab
+    # jupyter server password
+    tao-toolkit: 
+        runtime: nvidia
+        image: custom-tlt-stream:v3.0-py3-0.0.4
+        ports: 
+            - '8889:8888'
+        restart: always
+        volumes:
+            - /home/dmvn/tlt_exp:/workspace/tlt-experiments
+            - /media/dmvn/Hung_Workspace/examples:/workspace/examples
+            - /media/dmvn/Hung_Workspace/tlt_cv_samples_v1.0.2:/workspace/tlt_cv_samples_v1.0.2
+            - /media/dmvn/Hung_Workspace/pretrained_weights:/workspace/pretrained_weights
+        # entrypoint: jupyter notebook --ip 0.0.0.0 --allow-root --port 8888
+        entrypoint: jupyter lab --ip 0.0.0.0 --allow-root --port 8888(base)
+
+    tao-toolkit-newest:    
+        runtime: nvidia
+        # baseimage: nvcr.io/nvidia/tao/tao-toolkit-tf:v3.21.11-tf1.15.4-py3
+        image: custom-tao-stream:v3.2
+        ports: 
+            - '8889:8888'
+        restart: always
+        volumes:
+            - /mnt/Hung_Workspace:/workspace/tlt-experiments
+            - /mnt/Hung_Workspace/pretrained_weights:/workspace/pretrained_weights
+        entrypoint: jupyter notebook --ip 0.0.0.0 --allow-root --port 8888
+
+    yolov5-train:
+        runtime: nvidia
+        image: yolov5_train:0.0.3
+        ipc: host
+        ports:
+            - '8890:8888'
+            - '6006:6006'
+        restart: always
+        volumes:
+            - /home/dmvn/yolov5:/usr/src/app
+        entrypoint: jupyter lab --ip 0.0.0.0 --allow-root --port 8888
